@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+Kernel.trap(:INT) { print("\n"); exit 1 }
+
+require 'bundler/setup'
+require 'idlc-sdk-pfm'
+
+Pfm::CLI.new(ARGV.clone).run
