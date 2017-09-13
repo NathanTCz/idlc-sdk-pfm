@@ -3,6 +3,7 @@ require 'mixlib/shellout'
 require 'packer/binary'
 require 'terraform/binary'
 
+require 'idlc-sdk-core'
 require 'idlc-sdk-build'
 require 'idlc-sdk-deploy'
 
@@ -15,3 +16,9 @@ require 'idlc-sdk-pfm/builtin_commands'
 
 # Load config file as mapp of strings ex. SETTINGS[ 'AWS_REGION' ] = 'us-east-1'
 SETTINGS = Pfm::Settings.new(true).settings_strings
+
+# Global repository version file
+REPO_VERSION_FILE = 'version'.freeze
+
+# Load the current repository version number
+REPO_VERSION = Idlc::Utility.set_global_version(REPO_VERSION_FILE)

@@ -9,6 +9,8 @@
 /tmp/
 /vendor
 /.pfm
+/builds
+/inf
 
 # rspec failure tracking
 .rspec_status

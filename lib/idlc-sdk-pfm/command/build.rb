@@ -84,7 +84,7 @@ module Pfm
           @build_config.add_build_var_v2('httpd_port', ENV['HTTPD_PORT'])
 
           begin
-            Packer::Binary.build("#{@build_config.dump_build_vars} #{@config[:build_template]}") || raise
+            Packer::Binary.build("#{@build_config.dump_build_vars} #{@config[:build_template]}")
             Idlc::Build::Httpd.stop(pid)
             Dir.chdir(build_base_dir)
           rescue

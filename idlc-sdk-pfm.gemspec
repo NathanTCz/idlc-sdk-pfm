@@ -13,13 +13,15 @@ Gem::Specification.new do |spec|
   spec.description   = 'Provides the pfm executable for idlc-sdk. This gem is part of the IDLC SDK'
   spec.homepage      = 'https://github.com/nathantcz/idlc-sdk'
   spec.license       = 'MIT'
+  spec.has_rdoc      = 'yard'
+  spec.executables << 'pfm'
 
   spec.metadata = {
     'source_code_uri' => 'https://github.com/nathantcz/idlc-sdk-deploy'
   }
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+    f.match(%r{^(test|spec|features|bin)/})
   end
 
   spec.require_paths = ['lib']
