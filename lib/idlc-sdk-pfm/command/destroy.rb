@@ -37,7 +37,7 @@ module Pfm
         Idlc::Deploy::Config.add_deployment_var('app_release', 'null')
 
         Terraform::Binary.get("-update #{@workspace.tmp_dir}")
-        Terraform::Binary.destroy("-refresh=false #{@workspace.tmp_dir}")
+        Terraform::Binary.destroy("#{@workspace.tmp_dir}")
       rescue
         raise DeploymentFailure, 'Finished with errors'
       end
