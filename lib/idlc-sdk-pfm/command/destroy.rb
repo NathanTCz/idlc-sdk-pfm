@@ -33,7 +33,7 @@ module Pfm
       end
 
       def destroy
-        Idlc::Deploy::Config.add_deployment_var('build', 'null')
+        Idlc::Deploy::Config.add_deployment_var('build', ENV['SERVER_BUILD'])
         Idlc::Deploy::Config.add_deployment_var('app_release', 'null')
 
         Terraform::Binary.get("-update #{@workspace.tmp_dir}")
