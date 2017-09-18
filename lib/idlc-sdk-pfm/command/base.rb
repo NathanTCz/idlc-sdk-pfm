@@ -147,12 +147,12 @@ module Pfm
         Idlc::Deploy::Config.add_deployment_var('build', @config[:server_build])
         Idlc::Deploy::Config.add_deployment_var('app_release', @config[:app_release])
 
-        config.configure_state(bucket_name, sub_bucket)
-
         Idlc::Deploy::Keypair.generate("#{inf_base_dir}/env/kp")
         @workspace.flatten("#{inf_base_dir}/tf", 'tf')
         @workspace.add("#{inf_base_dir}/env/kp")
         @workspace.add('lib/tf/modules')
+
+        config.configure_state(bucket_name, sub_bucket, @workspace.tmp_dir)
       end
 
       def templates_dir

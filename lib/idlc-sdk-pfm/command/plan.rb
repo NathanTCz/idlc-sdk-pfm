@@ -53,7 +53,6 @@ module Pfm
 
       def plan
         begin
-          Terraform::Binary.get("-update #{@workspace.tmp_dir}")
           Terraform::Binary.plan(@workspace.tmp_dir) unless @config[:landscape]
           Terraform::Binary.plan("#{@workspace.tmp_dir} | landscape") if @config[:landscape]
         rescue

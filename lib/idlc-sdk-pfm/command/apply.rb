@@ -45,7 +45,6 @@ module Pfm
       end
 
       def apply
-        Terraform::Binary.get("-update #{@workspace.tmp_dir}")
         Terraform::Binary.apply(@workspace.tmp_dir.to_s) || raise
         Terraform::Binary.remote('push')
       rescue
