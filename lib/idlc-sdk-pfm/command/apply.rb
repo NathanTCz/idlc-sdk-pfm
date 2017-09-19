@@ -46,7 +46,6 @@ module Pfm
 
       def apply
         Terraform::Binary.apply(@workspace.tmp_dir.to_s) || raise
-        Terraform::Binary.remote('push')
       rescue
         raise DeploymentFailure, 'Finished with errors'
       end
