@@ -8,4 +8,5 @@ Pfm.commands do |c|
   c.builtin 'apply', :Apply, desc: 'Apply the infrastructure plan'
   c.builtin 'destroy', :Destroy, desc: 'Destroy all managed infrastructure'
   c.builtin 'format', :Format, desc: 'format infrastructure code'
+  c.builtin 'package', :Package, desc: 'package infrastructure repository'
 end
