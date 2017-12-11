@@ -47,6 +47,7 @@ module Pfm
         workspace.add('backend.tf') if File.exist? 'backend.tf'
 
         dest_zip = "./.pfm/#{@config[:application_name]}.#{REPO_VERSION}.infra.zip"
+        FileUtils.rm_rf(dest_zip) if File.exist? dest_zip
         Idlc::Workspace.zip_folder(workspace.tmp_dir, dest_zip)
         msg("packaged to #{dest_zip}")
       end
