@@ -42,7 +42,7 @@ module Pfm
         workspace = Idlc::Workspace.new
 
         workspace.flatten("#{inf_base_dir}/tf", 'tf')
-        workspace.add('lib/tf/modules')
+        workspace.add('lib/')
         workspace.add('ci/dsl')
         workspace.add('backend.tf') if File.exist? 'backend.tf'
 
