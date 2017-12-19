@@ -43,8 +43,8 @@ module Pfm
 
         workspace.flatten("#{inf_base_dir}/tf", 'tf')
         workspace.add('lib/')
-        workspace.add('ci/dsl')
         workspace.add('backend.tf') if File.exist? 'backend.tf'
+        workspace.add('infraspec.yml') if File.exist? 'infraspec.yml'
 
         dest_zip = "./.pfm/#{@config[:application_name]}.#{REPO_VERSION}.infra.zip"
         FileUtils.rm_rf(dest_zip) if File.exist? dest_zip
