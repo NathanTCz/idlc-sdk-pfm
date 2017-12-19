@@ -1,5 +1,6 @@
 require 'mixlib/cli'
 require 'idlc-sdk-pfm/helpers'
+require 'securerandom'
 
 module Pfm
   module Command
@@ -69,6 +70,7 @@ module Pfm
       def build_setup
         Packer::Binary.configure do |config|
           config.version = SETTINGS['PACKER_VERSION']
+          config.download_path = "/tmp/#{SecureRandom.uuid}"
         end
 
         @build_config = Idlc::Build::Config.new(SETTINGS['AWS_REGION'])
@@ -113,6 +115,7 @@ module Pfm
       def deploy_setup
         Terraform::Binary.configure do |config|
           config.version = SETTINGS['TERRAFORM_VERSION']
+          config.download_path = "/tmp/#{SecureRandom.uuid}"
         end
 
         raise InvalidRepository, 'This doesn\'t look like a valid infrastructure repository' unless File.directory? "#{inf_base_dir}/tf"
