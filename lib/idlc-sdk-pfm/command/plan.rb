@@ -25,6 +25,16 @@ module Pfm
              boolean:      true,
              default:      false
 
+      option :config_file,
+             long:         '--config-file',
+             description:  'Optional environment metadata file',
+             default:      ''
+
+      option :working_dir,
+             long:         '--dir',
+             description:  'Optional directory of infrastructure configuration to use',
+             default:      ''
+
       def initialize
         super
         @params_valid = true
@@ -36,8 +46,13 @@ module Pfm
         read_and_validate_params
 
         if params_valid?
-          deploy_setup
-          plan
+          if (@config[:config_file])
+            deploy_setupv2
+            plan(@config[:working_dir])
+          else
+            deploy_setup
+            plan(@workspace.tmp_dir)
+          end
           # @workspace.cleanup causing bundler issues
           0
         else
@@ -51,10 +66,10 @@ module Pfm
         1
       end
 
-      def plan
+      def plan(dir)
         begin
-          Terraform::Binary.plan(@workspace.tmp_dir) unless @config[:landscape]
-          Terraform::Binary.plan("#{@workspace.tmp_dir} | landscape") if @config[:landscape]
+          Terraform::Binary.plan(dir.to_s) unless @config[:landscape]
+          Terraform::Binary.plan("#{dir} | landscape") if @config[:landscape]
         rescue
           raise DeploymentFailure, 'Finished with errors'
         end

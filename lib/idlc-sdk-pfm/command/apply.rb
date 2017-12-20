@@ -18,6 +18,16 @@ module Pfm
              description:  'Server Build Number to Deploy',
              default:      ENV['SERVER_BUILD']
 
+      option :config_file,
+             long:         '--config-file',
+             description:  'Optional environment metadata file',
+             default:      ''
+
+      option :working_dir,
+             long:         '--dir',
+             description:  'Optional directory of infrastructure configuration to use',
+             default:      ''
+
       def initialize
         super
         @params_valid = true
@@ -29,8 +39,13 @@ module Pfm
         read_and_validate_params
 
         if params_valid?
-          deploy_setup
-          apply
+          if (@config[:config_file])
+            deploy_setupv2
+            apply(@config[:working_dir])
+          else
+            deploy_setup
+            apply(@workspace.tmp_dir)
+          end
           # @workspace.cleanup causing bundler issues
           0
         else
@@ -44,8 +59,8 @@ module Pfm
         1
       end
 
-      def apply
-        Terraform::Binary.apply(@workspace.tmp_dir.to_s) || raise
+      def apply(dir)
+        Terraform::Binary.apply(dir.to_s) || raise
       rescue
         raise DeploymentFailure, 'Finished with errors'
       end

@@ -1,6 +1,7 @@
 require 'mixlib/cli'
 require 'idlc-sdk-pfm/helpers'
 require 'securerandom'
+require 'json'
 
 module Pfm
   module Command
@@ -156,6 +157,40 @@ module Pfm
         @workspace.add('lib/tf/modules')
 
         config.configure_state(bucket_name, sub_bucket, @workspace.tmp_dir)
+      end
+
+      def deploy_setupv2
+        Terraform::Binary.configure do |config|
+          config.version = SETTINGS['TERRAFORM_VERSION']
+          config.download_path = "/tmp/#{SecureRandom.uuid}"
+        end
+
+        env_metadata = JSON.parse(open(@config[:config_file]).read)
+        env_metadata['account'].each do |key, value|
+          Idlc::Deploy::Config.add_deployment_var(key, value)
+        end
+        env_metadata['environment'].each do |key, value|
+          Idlc::Deploy::Config.add_deployment_var(key, value)
+        end
+        env_metadata['ec2'].each do |key, value|
+          Idlc::Deploy::Config.add_deployment_var(key, value)
+        end
+
+        # Pass some extra vars for Terraform
+        Idlc::Deploy::Config.add_deployment_var('environment_key', env_metadata['environment_key'])
+        Idlc::Deploy::Config.add_deployment_var('version', env_metadata['environment']['inf_version'])
+        Idlc::Deploy::Config.add_deployment_var('major_minor', Idlc::Utility.major_minor(env_metadata['environment']['inf_version']))
+        Idlc::Deploy::Config.add_deployment_var('major_minor_patch', Idlc::Utility.major_minor_patch(env_metadata['environment']['inf_version']))
+        Idlc::Deploy::Config.add_deployment_var('build', @config[:server_build])
+        Idlc::Deploy::Config.add_deployment_var('app_release', @config[:app_release])
+
+        Idlc::Deploy::Keypair.generate("#{@config[:working_dir]}/env/kp")
+
+        config.configure_state(
+          env_metadata['account']['tfstate_bucket'],
+          env_metadata['environment_key'],
+          @config[:working_dir]
+        )
       end
 
       def templates_dir
