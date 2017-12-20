@@ -168,7 +168,7 @@ module Pfm
         env_metadata = JSON.parse(open(@config[:config_file]).read)
         ['account', 'environment', 'ec2'].each do |section|
           env_metadata[section].each do |key, value|
-            next if (value.instance_of? Hash)
+            next unless (value.instance_of? String)
             Idlc::Deploy::Config.add_deployment_var(key, value)
           end
         end
