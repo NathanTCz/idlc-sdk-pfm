@@ -26,12 +26,14 @@ module Pfm
              default:      false
 
       option :config_file,
-             long:         '--config-file',
+             short:        '-c FILE',
+             long:         '--config-file FILE',
              description:  'Optional environment metadata file',
              default:      nil
 
       option :working_dir,
-             long:         '--dir',
+             short:        '-d DIR',
+             long:         '--dir DIR',
              description:  'Optional directory of infrastructure configuration to use',
              default:      ''
 
