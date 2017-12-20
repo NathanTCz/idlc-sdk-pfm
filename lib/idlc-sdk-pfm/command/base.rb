@@ -166,14 +166,11 @@ module Pfm
         end
 
         env_metadata = JSON.parse(open(@config[:config_file]).read)
-        env_metadata['account'].each do |key, value|
-          Idlc::Deploy::Config.add_deployment_var(key, value)
-        end
-        env_metadata['environment'].each do |key, value|
-          Idlc::Deploy::Config.add_deployment_var(key, value)
-        end
-        env_metadata['ec2'].each do |key, value|
-          Idlc::Deploy::Config.add_deployment_var(key, value)
+        ['account', 'environment', 'ec2'].each do |section|
+          env_metadata[section].each do |key, value|
+            next if (value.instance_of? Hash)
+            Idlc::Deploy::Config.add_deployment_var(key, value)
+          end
         end
 
         # Pass some extra vars for Terraform
