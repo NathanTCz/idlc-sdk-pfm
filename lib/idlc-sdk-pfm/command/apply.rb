@@ -21,7 +21,7 @@ module Pfm
       option :config_file,
              long:         '--config-file',
              description:  'Optional environment metadata file',
-             default:      ''
+             default:      nil
 
       option :working_dir,
              long:         '--dir',
