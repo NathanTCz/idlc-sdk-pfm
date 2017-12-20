@@ -183,6 +183,7 @@ module Pfm
 
         Idlc::Deploy::Keypair.generate("#{@config[:working_dir]}/env/kp")
 
+        config = Idlc::Deploy::Config.new(SETTINGS['AWS_REGION'])
         config.configure_state(
           env_metadata['account']['tfstate_bucket'],
           env_metadata['environment_key'],
