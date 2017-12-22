@@ -177,6 +177,7 @@ module Pfm
         Idlc::Deploy::Config.add_deployment_var('environment_key', env_metadata['environment_key'])
         Idlc::Deploy::Config.add_deployment_var('version', env_metadata['environment']['inf_version'])
         Idlc::Deploy::Config.add_deployment_var('app_release', @config[:app_release])
+        ENV['APP_RELEASE'] = @config[:app_release])
 
         Idlc::Deploy::Keypair.generate("#{@config[:working_dir]}/env/kp")
 
