@@ -166,7 +166,7 @@ module Pfm
         end
 
         env_metadata = JSON.parse(open(@config[:config_file]).read)
-        ['account', 'environment', 'ec2'].each do |section|
+        ['account', 'environment', 'ec2', 'application'].each do |section|
           env_metadata[section].each do |key, value|
             next unless (value.instance_of? String)
             Idlc::Deploy::Config.add_deployment_var(key, value)
@@ -176,9 +176,6 @@ module Pfm
         # Pass some extra vars for Terraform
         Idlc::Deploy::Config.add_deployment_var('environment_key', env_metadata['environment_key'])
         Idlc::Deploy::Config.add_deployment_var('version', env_metadata['environment']['inf_version'])
-        Idlc::Deploy::Config.add_deployment_var('major_minor', Idlc::Utility.major_minor(env_metadata['environment']['inf_version']))
-        Idlc::Deploy::Config.add_deployment_var('major_minor_patch', Idlc::Utility.major_minor_patch(env_metadata['environment']['inf_version']))
-        Idlc::Deploy::Config.add_deployment_var('build', @config[:server_build])
         Idlc::Deploy::Config.add_deployment_var('app_release', @config[:app_release])
 
         Idlc::Deploy::Keypair.generate("#{@config[:working_dir]}/env/kp")
