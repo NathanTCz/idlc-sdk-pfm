@@ -31,10 +31,10 @@ module Pfm
         if params_valid?
           if (@config[:config_file])
             deploy_setupv2
-            plan(@config[:working_dir])
+            destroy(@config[:working_dir])
           else
             deploy_setup
-            plan(@workspace.tmp_dir)
+            destroy(@workspace.tmp_dir)
           end
           # @workspace.cleanup causing bundler issues
           0
@@ -49,11 +49,11 @@ module Pfm
         1
       end
 
-      def destroy
+      def destroy(dir)
         Idlc::Deploy::Config.add_deployment_var('build', ENV['SERVER_BUILD'])
         Idlc::Deploy::Config.add_deployment_var('app_release', 'null')
 
-        Terraform::Binary.destroy("#{@workspace.tmp_dir}")
+        Terraform::Binary.destroy("#{dir}")
       rescue
         raise DeploymentFailure, 'Finished with errors'
       end
