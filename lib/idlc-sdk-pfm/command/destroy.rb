@@ -6,6 +6,18 @@ module Pfm
     class Destroy < Base
       banner 'Usage: pfm destroy [options]'
 
+      option :config_file,
+            short:        '-c FILE',
+            long:         '--config-file FILE',
+            description:  'Optional environment metadata file',
+            default:      nil
+
+      option :working_dir,
+            short:        '-d DIR',
+            long:         '--dir DIR',
+            description:  'Optional directory of infrastructure configuration to use',
+            default:      ''
+
       def initialize
         super
         @params_valid = true
@@ -17,8 +29,13 @@ module Pfm
         read_and_validate_params
 
         if params_valid?
-          deploy_setup
-          destroy
+          if (@config[:config_file])
+            deploy_setupv2
+            plan(@config[:working_dir])
+          else
+            deploy_setup
+            plan(@workspace.tmp_dir)
+          end
           # @workspace.cleanup causing bundler issues
           0
         else
