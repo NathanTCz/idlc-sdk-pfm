@@ -194,7 +194,7 @@ module Pfm
         end
 
         # write vars file
-        File.open("#{config[:working_dir]}/#{env_metadata['environment_key']}-tfvars.tf", 'w') { |file| file.write(vars_file.join('')) }
+        File.open("#{config[:working_dir]}/#{env_metadata['environment_key']}-tfvars.tf", 'w') { |file| file.write(vars_file) }
 
         # Pass some extra vars for Terraform
         Idlc::Deploy::Config.add_deployment_var('environment_key', env_metadata['environment_key'])
