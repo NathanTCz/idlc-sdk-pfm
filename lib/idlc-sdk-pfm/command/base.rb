@@ -166,13 +166,14 @@ module Pfm
         end
 
         # Create dynamic variables file for terraform based on config
-        vars_file = {}
+        keys = {}
+        vars_file = []
 
         env_metadata = JSON.parse(open(@config[:config_file]).read)
         ['account', 'environment', 'ec2', 'application'].each do |section|
           env_metadata[section].each do |key, value|
             # skip dups
-            next unless vars_file[key].nil?
+            next unless keys[key].nil?
 
             # replace null with empty string
             value = '' if value.nil?
@@ -180,8 +181,9 @@ module Pfm
             # skip lists and maps
             next unless (value.instance_of? String)
 
-            # add to vars file
-            vars_file[key] = <<~EOH
+            # add to vars file and record key for dups
+            keys[key] = 'parsed'
+            vars_file += <<~EOH
               variable "#{key}" {}
 
             EOH
