@@ -167,7 +167,7 @@ module Pfm
 
         # Create dynamic variables file for terraform based on config
         keys = {}
-        vars_file = []
+        vars_file = ''
 
         env_metadata = JSON.parse(open(@config[:config_file]).read)
         ['account', 'environment', 'ec2', 'application'].each do |section|
