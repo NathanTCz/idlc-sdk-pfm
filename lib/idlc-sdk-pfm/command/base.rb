@@ -173,9 +173,7 @@ module Pfm
           env_metadata[section].each do |key, value|
             next unless (value.instance_of? String)
             vars_file += <<~EOH
-              variable "#{key}" {
-                default = "#{Regexp.escape(value)}"
-              }
+              variable "#{key}" {}
 
             EOH
             Idlc::Deploy::Config.add_deployment_var(key, value)
