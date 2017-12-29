@@ -171,12 +171,22 @@ module Pfm
         env_metadata = JSON.parse(open(@config[:config_file]).read)
         ['account', 'environment', 'ec2', 'application'].each do |section|
           env_metadata[section].each do |key, value|
-            if value.nil? value = ''
+            # skip dups
+            next unless vars_file[key].nil?
+
+            # replace null with empty string
+            value = '' if value.nil?
+
+            # skip lists and maps
             next unless (value.instance_of? String)
+
+            # add to vars file
             vars_file[key] = <<~EOH
               variable "#{key}" {}
 
             EOH
+
+            # load value into envrionment
             Idlc::Deploy::Config.add_deployment_var(key, value)
           end
         end
