@@ -165,13 +165,25 @@ module Pfm
           config.download_path = "/tmp/#{SecureRandom.uuid}"
         end
 
+        # Create dynamic variables file for terraform based on config
+        vars_file = ""
+
         env_metadata = JSON.parse(open(@config[:config_file]).read)
         ['account', 'environment', 'ec2', 'application'].each do |section|
           env_metadata[section].each do |key, value|
             next unless (value.instance_of? String)
+            vars_file += <<~EOH
+              variable "#{key}" {
+                default = "#{value}"
+              }
+
+            EOH
             Idlc::Deploy::Config.add_deployment_var(key, value)
           end
         end
+
+        # write vars file
+        File.open("#{config[:working_dir]}/#{env_metadata['environment_key']}-tfvars.tf", 'w') { |file| file.write(vars_file) }
 
         # Pass some extra vars for Terraform
         Idlc::Deploy::Config.add_deployment_var('environment_key', env_metadata['environment_key'])
