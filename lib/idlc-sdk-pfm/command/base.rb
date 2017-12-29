@@ -174,7 +174,7 @@ module Pfm
             next unless (value.instance_of? String)
             vars_file += <<~EOH
               variable "#{key}" {
-                default = "#{value}"
+                default = "#{Regexp.escape(value)}"
               }
 
             EOH
