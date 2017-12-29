@@ -197,6 +197,7 @@ module Pfm
         File.open("#{config[:working_dir]}/#{env_metadata['environment_key']}-tfvars.tf", 'w') { |file| file.write(vars_file) }
 
         # Pass some extra vars for Terraform
+        Idlc::Deploy::Config.add_deployment_var('aws_region', SETTINGS['AWS_REGION'])
         Idlc::Deploy::Config.add_deployment_var('environment_key', env_metadata['environment_key'])
         Idlc::Deploy::Config.add_deployment_var('version', env_metadata['environment']['inf_version'])
         Idlc::Deploy::Config.add_deployment_var('app_release', @config[:app_release])
