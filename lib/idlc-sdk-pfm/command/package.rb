@@ -41,6 +41,21 @@ module Pfm
       def package
         raise InvalidRepository, 'This doesn\'t look like a valid infrastructure repository' unless File.directory? "#{inf_base_dir}/tf"
 
+        # tag git repo with version number.
+        begin
+          system("git tag -am 'v#{version}' #{version} &>/dev/null")
+          msg("Tagged v#{version}")
+        rescue
+          msg("Tag v#{REPO_VERSION} has already been created")
+        end
+
+        begin
+          system('git push --follow-tags &>/dev/null')
+          msg('Pushed git tags.')
+        rescue
+          err('Failed to push tags.')
+        end
+
         workspace = Idlc::Workspace.new
 
         workspace.flatten("#{inf_base_dir}/tf", 'tf')
