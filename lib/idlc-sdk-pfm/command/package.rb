@@ -77,6 +77,7 @@ module Pfm
         }
 
         response = client.fetch(request.to_json)
+        msg('Registered with Orchestrate.')
       end
 
       def read_and_validate_params
