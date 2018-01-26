@@ -1,5 +1,7 @@
 require 'idlc-sdk-pfm/command/base'
 require 'mixlib/shellout'
+require 'aws-sdk-s3'
+require 'json'
 
 module Pfm
   module Command
@@ -46,10 +48,35 @@ module Pfm
         workspace.add('backend.tf') if File.exist? 'backend.tf'
         workspace.add('infraspec.yml') if File.exist? 'infraspec.yml'
 
-        dest_zip = "./.pfm/#{@config[:application_name]}.#{REPO_VERSION}.infra.zip"
+        package_name = "#{@config[:application_name]}.#{REPO_VERSION}.infra.zip"
+        dest_zip = "./.pfm/#{package_name}"
         FileUtils.rm_rf(dest_zip) if File.exist? dest_zip
         Idlc::Workspace.zip_folder(workspace.tmp_dir, dest_zip)
         msg("packaged to #{dest_zip}")
+
+        # upload to s3
+        s3 = Aws::S3::Resource.new(region: SETTINGS['AWS_REGION'])
+        obj = s3.bucket('service-build-dev-build-artifacts').object(package_name)
+        obj.upload_file(dest_zip)
+        msg('Pushed package to S3.')
+
+        # register with Orchestrate Build
+        raise InvalidRepository, 'Missing configuration.schema.json file in root.' unless File.exist? 'configuration.schema.json'
+        client = Idlc::AWSRestClient.new()
+
+        request = {
+          service: 'build',
+          method: 'PUT',
+          path: '/builds',
+          body: {
+            application_name: @config[:application_name],
+            revision: REPO_VERSION,
+            artifact_path: "s3://service-build-dev-build-artifacts/#{package_name}",
+            configuration_schema: JSON.parse(File.read('configuration.schema.json'))
+          }
+        }
+
+        response = client.fetch(request.to_json)
       end
 
       def read_and_validate_params

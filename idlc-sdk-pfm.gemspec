@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'idlc-sdk-core'
   spec.add_runtime_dependency 'idlc-sdk-build'
   spec.add_runtime_dependency 'idlc-sdk-deploy'
+  spec.add_runtime_dependency 'aws-sdk-s3'
   spec.add_runtime_dependency 'berkshelf'
   spec.add_runtime_dependency 'chefspec'
   spec.add_runtime_dependency 'foodcritic-junit'
