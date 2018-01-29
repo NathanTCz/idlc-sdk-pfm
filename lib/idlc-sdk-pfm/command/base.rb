@@ -203,7 +203,8 @@ module Pfm
         Idlc::Deploy::Config.add_deployment_var('app_release', @config[:app_release])
         ENV['APP_RELEASE'] = @config[:app_release]
 
-        Idlc::Deploy::Keypair.generate("#{@config[:working_dir]}/env/kp")
+        FileUtils.mkdir_p "inf/env/kp"
+        Idlc::Deploy::Keypair.generate("inf/env/kp")
 
         config = Idlc::Deploy::Config.new(SETTINGS['AWS_REGION'])
         config.configure_state(
