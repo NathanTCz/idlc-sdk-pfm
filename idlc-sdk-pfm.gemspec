@@ -39,6 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'aws-sdk-s3'
   spec.add_runtime_dependency 'berkshelf'
   spec.add_runtime_dependency 'chefspec'
+  spec.add_runtime_dependency 'colorize'
   spec.add_runtime_dependency 'foodcritic-junit'
   spec.add_runtime_dependency 'foodcritic', '10.3.1'
   spec.add_runtime_dependency 'mixlib-cli'

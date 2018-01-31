@@ -2,6 +2,7 @@ require 'idlc-sdk-pfm/command/base'
 require 'mixlib/shellout'
 require 'aws-sdk-s3'
 require 'json'
+require 'colorize'
 
 module Pfm
   module Command
@@ -43,17 +44,17 @@ module Pfm
 
         # tag git repo with version number.
         begin
-          system("git tag -am 'v#{version}' #{version} &>/dev/null")
-          msg("Tagged v#{version}")
+          system("git tag -am 'v#{REPO_VERSION}' v#{REPO_VERSION} &>/dev/null") || raise
+          msg("Tagged v#{REPO_VERSION}".colorize(:green))
         rescue
-          msg("Tag v#{REPO_VERSION} has already been created")
+          msg("Tag v#{REPO_VERSION} has already been created... skipping.".colorize(:green))
         end
 
         begin
-          system('git push --follow-tags &>/dev/null')
-          msg('Pushed git tags.')
+          system('git push --follow-tags &>/dev/null') || raise
+          msg('Pushed git tags.'.colorize(:green))
         rescue
-          err('Failed to push tags.')
+          err('Failed to push tags.'.colorize(:red))
         end
 
         workspace = Idlc::Workspace.new
@@ -67,13 +68,13 @@ module Pfm
         dest_zip = "./.pfm/#{package_name}"
         FileUtils.rm_rf(dest_zip) if File.exist? dest_zip
         Idlc::Workspace.zip_folder(workspace.tmp_dir, dest_zip)
-        msg("packaged to #{dest_zip}")
+        msg("packaged to #{dest_zip}".colorize(:green))
 
         # upload to s3
         s3 = Aws::S3::Resource.new(region: SETTINGS['AWS_REGION'])
         obj = s3.bucket('service-build-dev-build-artifacts').object(package_name)
         obj.upload_file(dest_zip)
-        msg('Pushed package to S3.')
+        msg('Pushed package to S3.'.colorize(:green))
 
         # register with Orchestrate Build
         raise InvalidRepository, 'Missing configuration.schema.json file in root.' unless File.exist? 'configuration.schema.json'
@@ -92,7 +93,7 @@ module Pfm
         }
 
         response = client.fetch(request.to_json)
-        msg('Registered with Orchestrate.')
+        msg("Registered #{@config[:application_name]} #{REPO_VERSION} with Orchestrate.".colorize(:green))
       end
 
       def read_and_validate_params
