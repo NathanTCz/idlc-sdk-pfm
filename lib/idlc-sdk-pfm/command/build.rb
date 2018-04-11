@@ -82,6 +82,7 @@ module Pfm
           @build_config.add_build_var_v2('build_number', @config[:build_number])
           @build_config.add_build_var_v2('httpd_server', Idlc::Build::Httpd.private_ip.to_s)
           @build_config.add_build_var_v2('httpd_port', ENV['HTTPD_PORT'])
+          @build_config.add_build_var_v2('cookbooks_zip', "#{@workspace.tmp_dir}/cookbooks.zip")
 
           begin
             Packer::Binary.build("#{@build_config.dump_build_vars} #{@config[:build_template]}")
