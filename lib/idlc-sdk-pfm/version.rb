@@ -1,3 +1,3 @@
 module Pfm
-  VERSION = '1.0.21'.freeze
+  VERSION = '1.1.0'.freeze
 end
