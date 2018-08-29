@@ -201,6 +201,7 @@ module Pfm
         Idlc::Deploy::Config.add_deployment_var('environment_key', env_metadata['environment_key'])
         Idlc::Deploy::Config.add_deployment_var('version', env_metadata['environment']['inf_version'])
         Idlc::Deploy::Config.add_deployment_var('app_release', @config[:app_release])
+        Idlc::Deploy::Config.add_deployment_var('encrypted_svc_pass', env_metadata['environment']['encrypted']['svc_pass'])
         ENV['APP_RELEASE'] = @config[:app_release]
 
         FileUtils.mkdir_p "inf/env/kp"
