@@ -13,7 +13,6 @@ Gem::Specification.new do |spec|
   spec.description   = 'Provides the pfm executable for idlc-sdk. This gem is part of the IDLC SDK'
   spec.homepage      = 'https://github.com/nathantcz/idlc-sdk'
   spec.license       = 'MIT'
-  spec.has_rdoc      = 'yard'
   spec.executables << 'pfm'
 
   spec.metadata = {

@@ -72,7 +72,9 @@ module Pfm
 
         # upload to s3
         s3 = Aws::S3::Resource.new(region: SETTINGS['AWS_REGION'])
-        obj = s3.bucket('service-build-dev-build-artifacts').object(package_name)
+        bucket_name = Idlc::SERVICES[SETTINGS['AWS_REGION']]['build']['publish_bucket']
+
+        obj = s3.bucket(bucket_name).object(package_name)
         obj.upload_file(dest_zip)
         msg('Pushed package to S3.'.colorize(:green))
 
@@ -87,7 +89,7 @@ module Pfm
           body: {
             application_name: @config[:application_name],
             revision: REPO_VERSION,
-            artifact_path: "s3://service-build-dev-build-artifacts/#{package_name}",
+            artifact_path: "s3://#{bucket_name}/#{package_name}",
             configuration_schema: JSON.parse(File.read('configuration.schema.json'))
           }
         }
