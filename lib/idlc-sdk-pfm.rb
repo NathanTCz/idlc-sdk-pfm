@@ -14,6 +14,9 @@ require 'idlc-sdk-pfm/cli'
 require 'idlc-sdk-pfm/commands_map'
 require 'idlc-sdk-pfm/builtin_commands'
 
+# Default region
+ENV['AWS_REGION'] = 'us-east-1' unless ENV['AWS_REGION']
+
 # Load config file as mapp of strings ex. SETTINGS[ 'AWS_REGION' ] = 'us-east-1'
 SETTINGS = Pfm::Settings.new(true).settings_strings
 

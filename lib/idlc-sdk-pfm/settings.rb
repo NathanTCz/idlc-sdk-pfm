@@ -100,7 +100,7 @@ module Pfm
       @settings = {}
 
       # Required
-      @settings['AWS_REGION'] = Setting.new('us-east-1', true)
+      @settings['AWS_REGION'] = Setting.new(ENV['AWS_REGION'], true)
       @settings['RUBOCOP_RULES_FILE'] = Setting.new('.rubocop.yml', true)
       @settings['FOODCRITIC_RULES_FILE'] = Setting.new('.foodcritic', true)
       @settings['BUILD_BASE_DIR'] = Setting.new('builds', true)
