@@ -61,6 +61,7 @@ module Pfm
 
         workspace.flatten("#{inf_base_dir}/tf", 'tf')
         workspace.add('lib/')
+        workspace.add('.pfm/config') if File.exist? '.pfm/config'
         workspace.add('backend.tf') if File.exist? 'backend.tf'
         workspace.add('infraspec.yml') if File.exist? 'infraspec.yml'
 
