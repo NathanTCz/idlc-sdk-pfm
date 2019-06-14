@@ -41,7 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'colorize'
   spec.add_runtime_dependency 'foodcritic-junit'
   spec.add_runtime_dependency 'foodcritic', '10.3.1'
-  spec.add_runtime_dependency 'ohai', '14.8.12'
+  spec.add_runtime_dependency 'ohai', '< 13'
   spec.add_runtime_dependency 'mixlib-cli'
   spec.add_runtime_dependency 'mixlib-shellout'
   spec.add_runtime_dependency 'rubocop-junit-formatter'
