@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake', '>= 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '0.48.1'
   spec.add_development_dependency 'pry'
@@ -41,6 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'colorize'
   spec.add_runtime_dependency 'foodcritic-junit'
   spec.add_runtime_dependency 'foodcritic', '10.3.1'
+  spec.add_runtime_dependency 'cucumber-core', '5.0.2'
   spec.add_runtime_dependency 'ohai', '< 13'
   spec.add_runtime_dependency 'mixlib-cli'
   spec.add_runtime_dependency 'mixlib-shellout'
